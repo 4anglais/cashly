@@ -1,4 +1,4 @@
-import { Home, Settings, FileText } from "lucide-react";
+import { Home, Settings, FileText, WalletCards } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 export const Sidebar = () => {
@@ -6,7 +6,8 @@ export const Sidebar = () => {
 
   const navItems = [
     { icon: Home, label: "Dashboard", href: "/dashboard" },
-    { icon: FileText, label: "Transactions", href: "#" },
+    { icon: WalletCards, label: "Accounts", href: "/accounts" },
+    { icon: FileText, label: "Transactions", href: "/transactions" },
     { icon: Settings, label: "Settings", href: "#" },
   ];
 

@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { Landing } from "./pages/Landing";
 import { Dashboard } from "./pages/Dashboard";
+import { Accounts } from "./pages/Accounts";
+import { Transactions } from "./pages/Transactions";
 import "./styles/globals.css";
 
 function App() {
@@ -14,6 +16,22 @@ function App() {
           element={
             <Layout>
               <Dashboard />
+            </Layout>
+          }
+        />
+        <Route
+          path="/accounts"
+          element={
+            <Layout>
+              <Accounts />
+            </Layout>
+          }
+        />
+        <Route
+          path="/transactions"
+          element={
+            <Layout>
+              <Transactions />
             </Layout>
           }
         />
