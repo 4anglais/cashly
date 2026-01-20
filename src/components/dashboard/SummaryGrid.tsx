@@ -3,17 +3,17 @@ import { SummaryCard } from "./SummaryCard";
 type SummaryGridProps = {
   items?: Array<{
     title: string;
-    value: string;
+    value: number;
     variant?: "default" | "income" | "expense";
   }>;
 };
 
 export const SummaryGrid = ({
   items = [
-    { title: "Total Balance", value: "$0.00", variant: "default" },
-    { title: "Total Income", value: "$0.00", variant: "income" },
-    { title: "Total Expenses", value: "$0.00", variant: "expense" },
-    { title: "Net Difference", value: "$0.00", variant: "default" },
+    { title: "Total Balance", value: 0, variant: "default" },
+    { title: "Total Income", value: 0, variant: "income" },
+    { title: "Total Expenses", value: 0, variant: "expense" },
+    { title: "Net Difference", value: 0, variant: "default" },
   ],
 }: SummaryGridProps) => {
   return (

@@ -1,10 +1,12 @@
+import { useFinance } from "../../context/useFinance";
+
 export type TransactionVariant = "neutral" | "income" | "expense";
 
 type TransactionRowProps = {
   description: string;
   category: string;
   date: string;
-  amount: string;
+  amount: number;
   variant?: TransactionVariant;
 };
 
@@ -15,6 +17,8 @@ export const TransactionRow = ({
   amount,
   variant = "neutral",
 }: TransactionRowProps) => {
+  const { formatCurrency } = useFinance();
+
   const amountClass =
     variant === "income"
       ? "text-emerald-600 dark:text-emerald-400"
@@ -40,7 +44,7 @@ export const TransactionRow = ({
               </div>
             </div>
             <div className={`text-sm font-semibold whitespace-nowrap ${amountClass}`}>
-              {amount}
+              {formatCurrency(amount)}
             </div>
           </div>
         </div>

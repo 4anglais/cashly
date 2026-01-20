@@ -5,7 +5,7 @@ import { useFinance } from "../context/useFinance";
 
 export const Dashboard = () => {
   const today = format(new Date(), "EEEE, MMMM d, yyyy");
-  const { accounts, transactions, userIncomeSettings, categories } = useFinance();
+  const { accounts, transactions, userIncomeSettings, categories, formatCurrency } = useFinance();
 
   // Calculate total balance
   const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
@@ -58,7 +58,7 @@ export const Dashboard = () => {
           <DashboardCard>
             <p className="text-muted text-sm mb-3">Total Balance</p>
             <p className="text-2xl font-semibold text-mono-900 dark:text-mono-0 mb-2">
-              ${totalBalance.toFixed(2)}
+              {formatCurrency(totalBalance)}
             </p>
             <p className="text-xs text-muted">Updated today</p>
           </DashboardCard>
@@ -66,7 +66,7 @@ export const Dashboard = () => {
           <DashboardCard>
             <p className="text-muted text-sm mb-3">Total Income</p>
             <p className="text-2xl font-semibold text-emerald-600 dark:text-emerald-400 mb-2">
-              ${totalIncome.toFixed(2)}
+              {formatCurrency(totalIncome)}
             </p>
             <p className="text-xs text-muted">This month</p>
           </DashboardCard>
@@ -74,7 +74,7 @@ export const Dashboard = () => {
           <DashboardCard>
             <p className="text-muted text-sm mb-3">Total Expenses</p>
             <p className="text-2xl font-semibold text-accent-500 mb-2">
-              ${totalExpenses.toFixed(2)}
+              {formatCurrency(totalExpenses)}
             </p>
             <p className="text-xs text-muted">This month</p>
           </DashboardCard>
@@ -86,7 +86,7 @@ export const Dashboard = () => {
                 ? "text-emerald-600 dark:text-emerald-400"
                 : "text-accent-500"
             }`}>
-              ${netDifference.toFixed(2)}
+              {formatCurrency(netDifference)}
             </p>
             <p className="text-xs text-muted">Income - Expenses</p>
           </DashboardCard>
@@ -106,7 +106,7 @@ export const Dashboard = () => {
                     <div>
                       <p className="text-muted text-sm mb-1">Monthly Income</p>
                       <p className="text-3xl font-semibold text-mono-900 dark:text-mono-0 mb-3">
-                        ${userIncomeSettings?.mainIncomeAmount.toFixed(2) || "0.00"}
+                        {formatCurrency(userIncomeSettings?.mainIncomeAmount || 0)}
                       </p>
                       <p className="text-muted text-xs">Next pay date:</p>
                       <p className="text-sm font-medium text-mono-900 dark:text-mono-0 mt-1">
@@ -124,11 +124,11 @@ export const Dashboard = () => {
                 {/* Other Income Card */}
                 <DashboardCard title="Other Income">
                   <p className="text-3xl font-semibold text-mono-900 dark:text-mono-0 mb-3">
-                    ${
+                    {formatCurrency(
                       monthTransactions
                         .filter((t) => t.type === "income")
                         .reduce((sum, t) => sum + t.amount, 0) - (userIncomeSettings?.mainIncomeAmount || 0)
-                    }
+                    )}
                   </p>
                   <p className="text-muted text-sm">Additional sources</p>
                 </DashboardCard>
@@ -177,7 +177,7 @@ export const Dashboard = () => {
                               ? "text-emerald-600 dark:text-emerald-400"
                               : "text-accent-500"
                           }`}>
-                            {t.type === "income" ? "+" : "-"}${t.amount.toFixed(2)}
+                            {t.type === "income" ? "+" : "-"}{formatCurrency(t.amount)}
                           </td>
                           <td className="py-4 text-sm text-muted text-right">
                             {format(new Date(t.date), "MMM d")}

@@ -2,7 +2,7 @@ import { DashboardCard } from "../DashboardCard";
 import { useFinance } from "../../context/useFinance";
 
 export const AccountsSummary = () => {
-  const { accounts } = useFinance();
+  const { accounts, formatCurrency } = useFinance();
 
   // Calculate total balance
   const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
@@ -13,7 +13,7 @@ export const AccountsSummary = () => {
         <div>
           <p className="text-muted text-sm mb-2">Total Balance</p>
           <p className="text-3xl font-semibold text-mono-900 dark:text-mono-0 rounded-xl mb-2">
-            ${totalBalance.toFixed(2)}
+            {formatCurrency(totalBalance)}
           </p>
           <p className="text-xs text-muted">Across all accounts</p>
         </div>

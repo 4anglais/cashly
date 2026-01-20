@@ -16,7 +16,7 @@ export const AccountsGrid = () => {
           id={account.id}
           name={account.name}
           type={account.type as "Cash" | "Bank" | "Digital" | "Credit"}
-          balance={account.balance.toFixed(2)}
+          balance={account.balance}
         />
       ))}
     </div>

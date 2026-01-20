@@ -1,4 +1,5 @@
 import { DashboardCard } from "../DashboardCard";
+import { useFinance } from "../../context/useFinance";
 
 export type AccountType = "Cash" | "Bank" | "Digital" | "Credit";
 
@@ -6,7 +7,7 @@ type AccountCardProps = {
   id: string;
   name: string;
   type: AccountType;
-  balance: string;
+  balance: number;
 };
 
 const typePillClasses: Record<AccountType, string> = {
@@ -16,8 +17,8 @@ const typePillClasses: Record<AccountType, string> = {
   Credit: "bg-mono-100 dark:bg-mono-700 text-mono-800 dark:text-mono-0",
 };
 
-export const AccountCard = ({ id, name, type, balance }: AccountCardProps) => {
-  void id;
+export const AccountCard = ({ name, type, balance }: AccountCardProps) => {
+  const { formatCurrency } = useFinance();
 
   return (
     <DashboardCard className="transition-all hover:shadow-soft-sm hover:-translate-y-[1px]">
@@ -32,7 +33,9 @@ export const AccountCard = ({ id, name, type, balance }: AccountCardProps) => {
             </span>
           </div>
           <div className="mt-2">
-            <p className="text-2xl font-semibold text-mono-900 dark:text-mono-0">${balance}</p>
+            <p className="text-2xl font-semibold text-mono-900 dark:text-mono-0">
+              {formatCurrency(balance)}
+            </p>
           </div>
           <p className="mt-2 text-xs text-muted">Balance</p>
         </div>

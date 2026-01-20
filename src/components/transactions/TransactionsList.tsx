@@ -22,7 +22,7 @@ export const TransactionsList = () => {
           description={t.note || "—"}
           category={getCategoryName(t.categoryId)}
           date={format(new Date(t.date), "MMM d")}
-          amount={`${t.type === "income" ? "+" : "-"}$${t.amount.toFixed(2)}`}
+          amount={t.amount}
           variant={t.type === "income" ? "income" : "expense"}
         />
       ))}

@@ -45,3 +45,8 @@ export type UserIncomeSettings = {
   mainIncomeAmount: number;
   mainIncomeDate: string;
 };
+
+/**
+ * Supported currencies for the application
+ */
+export type Currency = 'USD' | 'ZMW';

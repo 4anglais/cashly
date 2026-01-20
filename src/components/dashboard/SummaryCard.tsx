@@ -1,23 +1,23 @@
 import { DashboardCard } from "../DashboardCard";
-import { Skeleton } from "../Skeleton";
+import { useFinance } from "../../context/useFinance";
 
 export type SummaryCardVariant = "default" | "income" | "expense";
 
 type SummaryCardProps = {
   title: string;
-  value: string;
+  value: number;
   variant?: SummaryCardVariant;
 };
 
-export const SummaryCard = ({ title, value, variant = "default" }: SummaryCardProps) => {
-  // Props are accepted for future wiring; UI is placeholder-only for now.
-  void value;
-  void variant;
+export const SummaryCard = ({ title, value }: SummaryCardProps) => {
+  const { formatCurrency } = useFinance();
 
   return (
     <DashboardCard>
       <p className="text-muted text-sm mb-3">{title}</p>
-      <Skeleton className="h-8 w-24 mb-2" />
+      <p className="text-2xl font-semibold text-mono-900 dark:text-mono-0 mb-2">
+        {formatCurrency(value)}
+      </p>
       <p className="text-xs text-muted">Updated today</p>
     </DashboardCard>
   );

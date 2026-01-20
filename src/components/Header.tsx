@@ -1,12 +1,19 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useFinance } from "../context/useFinance";
+import { Currency } from "../types/index";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { selectedCurrency, setCurrency } = useFinance();
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleCurrencyChange = (currency: Currency) => {
+    setCurrency(currency);
+  };
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-mono-0/80 dark:bg-mono-900/80 border-b border-mono-100 dark:border-mono-700">
@@ -30,6 +37,18 @@ export const Header = () => {
             >
               Dashboard
             </Link>
+          </div>
+
+          {/* Currency Dropdown - Desktop */}
+          <div className="hidden md:flex items-center">
+            <select
+              value={selectedCurrency}
+              onChange={(e) => handleCurrencyChange(e.target.value as Currency)}
+              className="rounded-lg px-3 py-2 text-sm font-medium bg-mono-50 dark:bg-mono-800 text-mono-900 dark:text-mono-0 border border-mono-100 dark:border-mono-700 cursor-pointer hover:bg-mono-100 dark:hover:bg-mono-700 transition-colors"
+            >
+              <option value="ZMW">ZMW (K)</option>
+              <option value="USD">USD ($)</option>
+            </select>
           </div>
 
           {/* Mobile Menu Button */}
@@ -58,6 +77,22 @@ export const Header = () => {
             >
               Dashboard
             </Link>
+            <div className="pt-2 border-t border-mono-100 dark:border-mono-700">
+              <label className="block text-sm font-medium text-mono-700 dark:text-mono-300 mb-2">
+                Currency
+              </label>
+              <select
+                value={selectedCurrency}
+                onChange={(e) => {
+                  handleCurrencyChange(e.target.value as Currency);
+                  setIsOpen(false);
+                }}
+                className="w-full rounded-lg px-3 py-2 text-sm font-medium bg-mono-50 dark:bg-mono-800 text-mono-900 dark:text-mono-0 border border-mono-100 dark:border-mono-700 cursor-pointer hover:bg-mono-100 dark:hover:bg-mono-700 transition-colors"
+              >
+                <option value="ZMW">ZMW (K)</option>
+                <option value="USD">USD ($)</option>
+              </select>
+            </div>
           </div>
         )}
       </nav>

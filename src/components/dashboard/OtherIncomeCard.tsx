@@ -1,22 +1,20 @@
 import { DashboardCard } from "../DashboardCard";
-import { Skeleton } from "../Skeleton";
+import { useFinance } from "../../context/useFinance";
 
 type OtherIncomeCardProps = {
   title?: string;
-  total?: string;
+  total?: number;
 };
 
-export const OtherIncomeCard = ({ title = "Other Income", total = "$0.00" }: OtherIncomeCardProps) => {
-  void total;
+export const OtherIncomeCard = ({ title = "Other Income", total = 0 }: OtherIncomeCardProps) => {
+  const { formatCurrency } = useFinance();
 
   return (
     <DashboardCard title={title}>
-      <Skeleton className="h-10 w-32 mb-3" />
-      <div className="space-y-2">
-        <Skeleton className="h-3 w-3/4" />
-        <Skeleton className="h-3 w-2/3" />
-        <Skeleton className="h-3 w-1/2" />
-      </div>
+      <p className="text-3xl font-semibold text-mono-900 dark:text-mono-0 mb-3">
+        {formatCurrency(total)}
+      </p>
+      <p className="text-xs text-muted">Total other income</p>
     </DashboardCard>
   );
 };

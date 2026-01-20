@@ -36,7 +36,7 @@ const SummaryItem = ({
 };
 
 export const TransactionsSummary = () => {
-  const { transactions } = useFinance();
+  const { transactions, formatCurrency } = useFinance();
 
   // This month's transactions
   const now = new Date();
@@ -60,11 +60,11 @@ export const TransactionsSummary = () => {
 
   return (
     <div className="grid sm:grid-cols-3 gap-4">
-      <SummaryItem label="Total Income" amount={`$${totalIncome.toFixed(2)}`} variant="income" />
-      <SummaryItem label="Total Expenses" amount={`$${totalExpenses.toFixed(2)}`} variant="expense" />
+      <SummaryItem label="Total Income" amount={formatCurrency(totalIncome)} variant="income" />
+      <SummaryItem label="Total Expenses" amount={formatCurrency(totalExpenses)} variant="expense" />
       <SummaryItem
         label="Net Balance"
-        amount={`$${netBalance.toFixed(2)}`}
+        amount={formatCurrency(netBalance)}
         variant={netBalance >= 0 ? "income" : "expense"}
       />
     </div>
