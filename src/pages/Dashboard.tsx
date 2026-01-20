@@ -2,9 +2,21 @@ import { Calendar, TrendingUp } from "lucide-react";
 import { DashboardCard } from "../components/DashboardCard";
 import { Skeleton } from "../components/Skeleton";
 import { format } from "date-fns";
+import { useFinance } from "../context/FinanceContext";
+import { formatMoney } from "../utils/money";
 
 export const Dashboard = () => {
   const today = format(new Date(), "EEEE, MMMM d, yyyy");
+  const { selectedCurrency, convertAmount } = useFinance();
+
+  // Mock baseline values (source currency: ZMW)
+  const totals = {
+    balance: 12500,
+    income: 8200,
+    expenses: 5400,
+  };
+  const net = totals.income - totals.expenses;
+  const primaryIncomeMonthly = 7600;
 
   return (
     <div className="flex-1 p-4 sm:p-6 lg:p-8 bg-mono-25 dark:bg-mono-800">
@@ -21,17 +33,36 @@ export const Dashboard = () => {
         {/* Summary Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[
-            { label: "Total Balance", icon: "💰" },
-            { label: "Total Income", icon: "📈" },
-            { label: "Total Expenses", icon: "📉" },
-            { label: "Net Difference", icon: "📊" },
-          ].map((card) => (
-            <DashboardCard key={card.label}>
-              <p className="text-muted text-sm mb-3">{card.label}</p>
-              <Skeleton className="h-8 w-24 mb-2" />
-              <p className="text-xs text-muted">Updated today</p>
-            </DashboardCard>
-          ))}
+            {
+              label: "Total Balance",
+              amountZmw: totals.balance,
+            },
+            {
+              label: "Total Income",
+              amountZmw: totals.income,
+            },
+            {
+              label: "Total Expenses",
+              amountZmw: totals.expenses,
+            },
+            {
+              label: "Net Difference",
+              amountZmw: net,
+            },
+          ].map((card) => {
+            const amount = convertAmount(card.amountZmw, "ZMW", selectedCurrency);
+            return (
+              <DashboardCard key={card.label}>
+                <p className="text-muted text-sm mb-3">{card.label}</p>
+                <div className="h-8 w-fit min-w-24 flex items-center">
+                  <p className="text-2xl font-semibold text-mono-900 dark:text-mono-0">
+                    {formatMoney(amount, selectedCurrency)}
+                  </p>
+                </div>
+                <p className="text-xs text-muted">Updated today</p>
+              </DashboardCard>
+            );
+          })}
         </div>
 
         {/* Main Content Grid */}
@@ -47,7 +78,11 @@ export const Dashboard = () => {
                   <div className="flex items-end justify-between">
                     <div>
                       <p className="text-muted text-sm mb-1">Monthly Income</p>
-                      <Skeleton className="h-10 w-32 mb-3" />
+                      <div className="h-10 w-fit min-w-32 flex items-center mb-3">
+                        <p className="text-3xl font-semibold text-mono-900 dark:text-mono-0">
+                          {formatMoney(convertAmount(primaryIncomeMonthly, "ZMW", selectedCurrency), selectedCurrency)}
+                        </p>
+                      </div>
                       <p className="text-muted text-xs">Next pay date:</p>
                       <Skeleton className="h-4 w-24 mt-1" />
                     </div>
@@ -59,7 +94,11 @@ export const Dashboard = () => {
 
                 {/* Other Income Card */}
                 <DashboardCard title="Other Income">
-                  <Skeleton className="h-10 w-32 mb-3" />
+                  <div className="h-10 w-fit min-w-32 flex items-center mb-3">
+                    <p className="text-3xl font-semibold text-mono-900 dark:text-mono-0">
+                      {formatMoney(convertAmount(600, "ZMW", selectedCurrency), selectedCurrency)}
+                    </p>
+                  </div>
                   <p className="text-muted text-sm">Additional sources</p>
                 </DashboardCard>
               </div>
@@ -101,7 +140,11 @@ export const Dashboard = () => {
                           <Skeleton className="h-4 w-20" />
                         </td>
                         <td className="py-4">
-                          <Skeleton className="h-4 w-16 ml-auto" />
+                          <div className="ml-auto w-fit">
+                            <span className="text-sm font-medium text-mono-900 dark:text-mono-0">
+                              {formatMoney(convertAmount(180 + i * 35, "ZMW", selectedCurrency), selectedCurrency)}
+                            </span>
+                          </div>
                         </td>
                         <td className="py-4">
                           <Skeleton className="h-4 w-24 ml-auto" />

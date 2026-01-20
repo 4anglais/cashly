@@ -1,5 +1,7 @@
 import { DashboardCard } from "../DashboardCard";
 import { Skeleton } from "../Skeleton";
+import { useFinance } from "../../context/FinanceContext";
+import { formatMoney } from "../../utils/money";
 
 export type AccountType = "Cash" | "Bank" | "Digital" | "Credit";
 
@@ -20,6 +22,16 @@ export const AccountCard = ({ name, type, balance }: AccountCardProps) => {
   // UI-only: accept props now, wire later.
   void name;
   void balance;
+  const { selectedCurrency, convertAmount } = useFinance();
+
+  // Mock baseline per-type balances (source currency: ZMW)
+  const mockByType: Record<AccountType, number> = {
+    Bank: 9200,
+    Cash: 540,
+    Digital: 2100,
+    Credit: 1800,
+  };
+  const displayAmount = formatMoney(convertAmount(mockByType[type], "ZMW", selectedCurrency), selectedCurrency);
 
   return (
     <DashboardCard className="transition-all hover:shadow-soft-sm hover:-translate-y-[1px]">
@@ -34,7 +46,9 @@ export const AccountCard = ({ name, type, balance }: AccountCardProps) => {
             </span>
           </div>
           <div className="mt-2">
-            <Skeleton className="h-9 w-28 rounded-xl" />
+            <div className="h-9 w-fit min-w-28 rounded-xl flex items-center">
+              <p className="text-2xl font-semibold text-mono-900 dark:text-mono-0">{displayAmount}</p>
+            </div>
           </div>
           <p className="mt-2 text-xs text-muted">Balance</p>
         </div>

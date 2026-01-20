@@ -1,12 +1,12 @@
 import { Plus } from "lucide-react";
+import { useState } from "react";
 import { DashboardCard } from "../components/DashboardCard";
 import { AccountsSummary } from "../components/accounts/AccountsSummary";
 import { AccountsGrid } from "../components/accounts/AccountsGrid";
 import { AddAccountModal } from "../components/accounts/AddAccountModal";
 
 export const Accounts = () => {
-  // UI-only: the modal will be wired later. For now we show it open so styling is visible.
-  const modalOpen = true;
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <div className="flex-1 p-4 sm:p-6 lg:p-8 bg-mono-25 dark:bg-mono-800">
@@ -17,7 +17,11 @@ export const Accounts = () => {
             <p className="text-sm text-muted mt-1">Manage where your money lives</p>
           </div>
 
-          <button type="button" className="btn-primary inline-flex items-center gap-2 w-full sm:w-auto">
+          <button
+            type="button"
+            onClick={() => setModalOpen(true)}
+            className="btn-primary inline-flex items-center gap-2 w-full sm:w-auto"
+          >
             <Plus size={18} />
             Add Account
           </button>
@@ -39,7 +43,7 @@ export const Accounts = () => {
           </DashboardCard>
         </section>
 
-        <AddAccountModal open={modalOpen} />
+        <AddAccountModal open={modalOpen} onClose={() => setModalOpen(false)} />
       </div>
     </div>
   );

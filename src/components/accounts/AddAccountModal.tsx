@@ -1,11 +1,39 @@
 import { X } from "lucide-react";
-import { Skeleton } from "../Skeleton";
+import { useState } from "react";
+import { useFinance } from "../../context/FinanceContext";
+import { Account } from "../../types/index";
 
 type AddAccountModalProps = {
   open?: boolean;
+  onClose?: () => void;
 };
 
-export const AddAccountModal = ({ open = false }: AddAccountModalProps) => {
+export const AddAccountModal = ({ open = false, onClose }: AddAccountModalProps) => {
+  const { addAccount } = useFinance();
+  const [name, setName] = useState("");
+  const [type, setType] = useState<"cash" | "bank" | "digital" | "credit">("bank");
+  const [balance, setBalance] = useState("");
+
+  const handleSave = () => {
+    if (!name.trim()) return;
+
+    const newAccount: Account = {
+      id: `acc-${Date.now()}`,
+      name: name.trim(),
+      type,
+      balance: parseFloat(balance) || 0,
+      createdAt: new Date().toISOString(),
+    };
+
+    addAccount(newAccount);
+
+    // Reset form
+    setName("");
+    setType("bank");
+    setBalance("");
+    onClose?.();
+  };
+
   if (!open) return null;
 
   return (
@@ -14,7 +42,7 @@ export const AddAccountModal = ({ open = false }: AddAccountModalProps) => {
       className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-mono-900/40 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-mono-900/40 backdrop-blur-sm" onClick={onClose} />
 
       {/* Sheet */}
       <div className="relative w-full max-w-xl rounded-3xl border border-mono-100 dark:border-mono-700 bg-mono-0 dark:bg-mono-800 shadow-soft">
@@ -25,6 +53,7 @@ export const AddAccountModal = ({ open = false }: AddAccountModalProps) => {
           </div>
           <button
             type="button"
+            onClick={onClose}
             className="h-10 w-10 rounded-2xl border border-mono-100 dark:border-mono-700 bg-mono-25 dark:bg-mono-700 hover:bg-mono-50 dark:hover:bg-mono-600 transition-colors flex items-center justify-center"
             aria-label="Close"
           >
@@ -36,49 +65,55 @@ export const AddAccountModal = ({ open = false }: AddAccountModalProps) => {
           <div className="grid gap-5">
             <label className="grid gap-2">
               <span className="text-sm font-medium text-mono-900 dark:text-mono-0">Account name</span>
-              <div className="rounded-2xl border border-mono-100 dark:border-mono-700 bg-mono-25 dark:bg-mono-900/30 px-4 py-3">
-                <Skeleton className="h-4 w-1/2 rounded-md" />
-              </div>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. My Savings"
+                className="rounded-2xl border border-mono-100 dark:border-mono-700 bg-mono-25 dark:bg-mono-900/30 px-4 py-3 text-sm text-mono-900 dark:text-mono-0 placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent-500"
+              />
             </label>
 
             <label className="grid gap-2">
               <span className="text-sm font-medium text-mono-900 dark:text-mono-0">Account type</span>
-              <div className="rounded-2xl border border-mono-100 dark:border-mono-700 bg-mono-25 dark:bg-mono-900/30 px-4 py-3 flex items-center justify-between">
-                <Skeleton className="h-4 w-28 rounded-md" />
-                <Skeleton className="h-4 w-4 rounded-md" />
-              </div>
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value as "cash" | "bank" | "digital" | "credit")}
+                className="rounded-2xl border border-mono-100 dark:border-mono-700 bg-mono-25 dark:bg-mono-900/30 px-4 py-3 text-sm text-mono-900 dark:text-mono-0 focus:outline-none focus:ring-2 focus:ring-accent-500"
+              >
+                <option value="cash">Cash</option>
+                <option value="bank">Bank</option>
+                <option value="digital">Digital</option>
+                <option value="credit">Credit</option>
+              </select>
             </label>
 
             <label className="grid gap-2">
               <span className="text-sm font-medium text-mono-900 dark:text-mono-0">Starting balance</span>
-              <div className="rounded-2xl border border-mono-100 dark:border-mono-700 bg-mono-25 dark:bg-mono-900/30 px-4 py-3">
-                <Skeleton className="h-4 w-36 rounded-md" />
-              </div>
+              <input
+                type="number"
+                value={balance}
+                onChange={(e) => setBalance(e.target.value)}
+                placeholder="0.00"
+                step="0.01"
+                className="rounded-2xl border border-mono-100 dark:border-mono-700 bg-mono-25 dark:bg-mono-900/30 px-4 py-3 text-sm text-mono-900 dark:text-mono-0 placeholder-muted focus:outline-none focus:ring-2 focus:ring-accent-500"
+              />
             </label>
 
-            <div className="grid gap-2">
-              <span className="text-sm font-medium text-mono-900 dark:text-mono-0">Color</span>
-              <div className="rounded-2xl border border-mono-100 dark:border-mono-700 bg-mono-25 dark:bg-mono-900/30 px-4 py-4">
-                <div className="flex items-center gap-3">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="h-9 w-9 rounded-2xl border border-mono-100 dark:border-mono-700 bg-mono-0 dark:bg-mono-800 shadow-soft-inset"
-                    >
-                      <div className="p-2">
-                        <Skeleton className="h-5 w-5 rounded-md" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
             <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
-              <button type="button" className="btn-secondary w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={onClose}
+                className="btn-secondary w-full sm:w-auto"
+              >
                 Cancel
               </button>
-              <button type="button" className="btn-primary w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={handleSave}
+                disabled={!name.trim()}
+                className="btn-primary w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 Save
               </button>
             </div>

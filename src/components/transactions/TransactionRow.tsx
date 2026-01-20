@@ -1,4 +1,6 @@
 import { Skeleton } from "../Skeleton";
+import { useFinance } from "../../context/FinanceContext";
+import { formatMoney } from "../../utils/money";
 
 export type TransactionVariant = "neutral" | "income" | "expense";
 
@@ -18,6 +20,12 @@ export const TransactionRow = ({
   void description;
   void date;
   void amount;
+  const { selectedCurrency, convertAmount } = useFinance();
+
+  // Mock baseline row amount (source currency: ZMW)
+  const baseZmw =
+    variant === "income" ? 850 : variant === "expense" ? 420 : 210;
+  const displayAmount = formatMoney(convertAmount(baseZmw, "ZMW", selectedCurrency), selectedCurrency);
 
   const amountClass =
     variant === "income"
@@ -44,7 +52,7 @@ export const TransactionRow = ({
               </div>
             </div>
             <div className={`text-sm font-semibold ${amountClass}`}>
-              <Skeleton className="h-4 w-16 rounded-md ml-auto" />
+              <span>{displayAmount}</span>
             </div>
           </div>
         </div>
