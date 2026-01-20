@@ -1,9 +1,9 @@
 import { DashboardCard } from "../DashboardCard";
-import { Skeleton } from "../Skeleton";
 
 export type AccountType = "Cash" | "Bank" | "Digital" | "Credit";
 
 type AccountCardProps = {
+  id: string;
   name: string;
   type: AccountType;
   balance: string;
@@ -16,31 +16,29 @@ const typePillClasses: Record<AccountType, string> = {
   Credit: "bg-mono-100 dark:bg-mono-700 text-mono-800 dark:text-mono-0",
 };
 
-export const AccountCard = ({ name, type, balance }: AccountCardProps) => {
-  // UI-only: accept props now, wire later.
-  void name;
-  void balance;
+export const AccountCard = ({ id, name, type, balance }: AccountCardProps) => {
+  void id;
 
   return (
     <DashboardCard className="transition-all hover:shadow-soft-sm hover:-translate-y-[1px]">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <Skeleton className="h-4 w-32 rounded-md" />
+            <p className="font-medium text-mono-900 dark:text-mono-0 truncate">{name}</p>
             <span
-              className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${typePillClasses[type]}`}
+              className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ${typePillClasses[type]}`}
             >
               {type}
             </span>
           </div>
           <div className="mt-2">
-            <Skeleton className="h-9 w-28 rounded-xl" />
+            <p className="text-2xl font-semibold text-mono-900 dark:text-mono-0">${balance}</p>
           </div>
           <p className="mt-2 text-xs text-muted">Balance</p>
         </div>
 
         <div className="h-12 w-12 rounded-2xl border border-mono-100 dark:border-mono-700 bg-mono-50 dark:bg-mono-700 shadow-soft-inset flex items-center justify-center shrink-0">
-          <Skeleton className="h-5 w-5 rounded-md" />
+          <span className="text-lg">🏦</span>
         </div>
       </div>
     </DashboardCard>

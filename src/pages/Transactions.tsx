@@ -1,4 +1,5 @@
 import { Plus, Search, SlidersHorizontal } from "lucide-react";
+import { useState } from "react";
 import { DashboardCard } from "../components/DashboardCard";
 import { TransactionsFilters } from "../components/transactions/TransactionsFilters";
 import { TransactionsSummary } from "../components/transactions/TransactionsSummary";
@@ -6,8 +7,7 @@ import { TransactionsList } from "../components/transactions/TransactionsList";
 import { AddTransactionModal } from "../components/transactions/AddTransactionModal";
 
 export const Transactions = () => {
-  // UI-only: modal wiring will come later; for now keep it visible to validate styling.
-  const modalOpen = true;
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <div className="flex-1 p-4 sm:p-6 lg:p-8 bg-mono-25 dark:bg-mono-800">
@@ -33,7 +33,11 @@ export const Transactions = () => {
               Filter
             </button>
 
-            <button type="button" className="btn-primary inline-flex items-center justify-center gap-2 h-12">
+            <button
+              type="button"
+              onClick={() => setModalOpen(true)}
+              className="btn-primary inline-flex items-center justify-center gap-2 h-12"
+            >
               <Plus size={18} />
               Add Transaction
             </button>
@@ -60,7 +64,7 @@ export const Transactions = () => {
           </DashboardCard>
         </section>
 
-        <AddTransactionModal open={modalOpen} />
+        <AddTransactionModal open={modalOpen} onClose={() => setModalOpen(false)} />
       </div>
     </div>
   );

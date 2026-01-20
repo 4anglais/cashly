@@ -1,31 +1,29 @@
 import { TransactionRow } from "./TransactionRow";
+import { useFinance } from "../../context/useFinance";
+import { format } from "date-fns";
 
-type TransactionsListProps = {
-  rows?: Array<{
-    description: string;
-    date: string;
-    amount: string;
-    variant?: "neutral" | "income" | "expense";
-  }>;
-};
+export const TransactionsList = () => {
+  const { transactions, categories } = useFinance();
 
-export const TransactionsList = ({
-  rows = Array.from({ length: 8 }).map((_, i) => ({
-    description: `Transaction ${i + 1}`,
-    date: "—",
-    amount: "$0.00",
-    variant: i % 3 === 0 ? "income" : i % 3 === 1 ? "expense" : "neutral",
-  })),
-}: TransactionsListProps) => {
+  const getCategoryName = (categoryId: string) => {
+    const category = categories.find((c) => c.id === categoryId);
+    return category?.name || "Other";
+  };
+
+  if (transactions.length === 0) {
+    return <p className="text-center text-muted py-8">No transactions yet</p>;
+  }
+
   return (
     <div className="space-y-3">
-      {rows.map((r, idx) => (
+      {transactions.map((t) => (
         <TransactionRow
-          key={idx}
-          description={r.description}
-          date={r.date}
-          amount={r.amount}
-          variant={r.variant}
+          key={t.id}
+          description={t.note || "—"}
+          category={getCategoryName(t.categoryId)}
+          date={format(new Date(t.date), "MMM d")}
+          amount={`${t.type === "income" ? "+" : "-"}$${t.amount.toFixed(2)}`}
+          variant={t.type === "income" ? "income" : "expense"}
         />
       ))}
     </div>

@@ -4,11 +4,13 @@ import { Landing } from "./pages/Landing";
 import { Dashboard } from "./pages/Dashboard";
 import { Accounts } from "./pages/Accounts";
 import { Transactions } from "./pages/Transactions";
+import { FinanceProvider } from "./context/FinanceContext";
 import "./styles/globals.css";
 
 function App() {
   return (
-    <Router>
+    <FinanceProvider>
+      <Router>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route
@@ -37,6 +39,7 @@ function App() {
         />
       </Routes>
     </Router>
+    </FinanceProvider>
   );
 }
 
